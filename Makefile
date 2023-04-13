@@ -1,6 +1,6 @@
 
-CC=tcc
-CCFLAGS=-std=C89 -pedantic -O2 -Wall -Wpedantic -g
+CC=cc
+CCFLAGS=-std=c89 -pedantic -O2 -Wall -Wpedantic -g
 
 all: ./obj/literateC.o
 	${CC} ${CCFLAGS} -o ./bin/literateC ./obj/literateC.o
@@ -20,5 +20,5 @@ uninstall:
 	echo man page missing
 
 clean:
-	rm bin/literateC; touch bin/literateC
-	rm obj/*
+	cd ./bin/ ; rm literateC
+	cd ./obj ; rm *
