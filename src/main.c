@@ -17,7 +17,7 @@ void parse(int fd, char* file_name);
 int
 main(int argc,
      char**argv)
-{ 
+{
     int fd_c;
     char* file_path;
     char* file_name;
@@ -44,8 +44,16 @@ main(int argc,
     if (!res)
     {
         path_to_name(&file_name, file_path);
-        parse(fd_c, file_name);
+        res = parse(fd_c, file_name);
         close(fd_c);
+    }
+
+    if (!res)
+    {/* Compile C code and Typeset Document
+        execv();
+        execv();
+     */
+        ;
     }
 
 
@@ -92,12 +100,22 @@ cfile(char* file_path)
 void
 path_to_name(char** file_name, char* file_path)
 {
-    ;
+    int i, dir_nest = 0;
+    for (i=0; file_path[i]; i++)
+        if (file_path[i] == '/')
+            dir_nest++;
+    while (dir_nest)
+    {
+        if (*file_path == '/')
+            dir_nest--;
+        file_path++;
+    }
+    *file_name = file_path;
 }
 
-void
+int
 parse(int fd, char* file_name)
 {
-    ;
+    return 0;
 }
 
