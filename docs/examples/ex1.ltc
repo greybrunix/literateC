@@ -65,6 +65,7 @@ of the program!
 \begin{code}[hide, id=end, env=1, i=2]
 return 0;
 }
+\end{code}
     Both of these components are hidden in this document,
 but they both exist, same as the includes in env=0;
 the hidden tag serves to prevent code from being typeset
