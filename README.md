@@ -28,3 +28,8 @@ WIP - To be Developed
 ## Credits
 
    * bdg (greybrunix)
+
+### Sources
+
+    * Knuth, Donald; "On the Translation of Languages from
+Left to Right"; Information and Control Vol.8, Issue 6, p607-639; 1965
