@@ -11,7 +11,7 @@
 int cfile(char* file_path);
 void path_to_name(char** file_name, char* file_path);
 void lexer();
-void parse(int fd, char* file_name);
+int parse(int fd, char* file_name);
 
 
 int
@@ -21,6 +21,10 @@ main(int argc,
     int fd_c;
     char* file_path;
     char* file_name;
+    char* tmpc = "./tmp.c";
+    char* tmpt = "./tmp.tex";
+    char* arg1[] = { tmpc , NIL };
+    char* arg2[] = { tmpt , NIL };
     int res;
     /* 0 -> success
        argument error:
@@ -50,10 +54,14 @@ main(int argc,
 
     if (!res)
     {/* Compile C code and Typeset Document
-        execv();
-        execv();
+        execv("gcc", {"./tmp.c", 0});
+        execv("latex", {"./tmp.tex", 0});
      */
-        ;
+        /*execv("gcc", arg1);
+        execv("latex", arg2);
+        */
+        unlink(tmpc);
+        unlink(tmpt);
     }
 
 
@@ -67,7 +75,7 @@ main(int argc,
         }
         case 2:
         {
-            write(2, "Not a .ltc file\n", 17);
+            write(2, "Not a .lrc file\n", 17);
             break;
         }
         case 3:
@@ -93,7 +101,7 @@ cfile(char* file_path)
     while (*file_path && *file_path != '.')
         file_path++;
     if (*file_path == '.')
-        res = !strcmp(file_path, ".ltc");
+        res = !strcmp(file_path, ".lrc");
     return res;
 }
 
@@ -116,6 +124,42 @@ path_to_name(char** file_name, char* file_path)
 int
 parse(int fd, char* file_name)
 {
+    int fd_cfile;
+    int fd_tfile;
+    /* GRAMMAR:
+     * S -> P D
+     * P -> C Is
+     * C -> docclass[id*]{id}
+     *    | docclass{id}
+     * Is-> I Is
+     *    | 
+     * I -> usepack{id}   
+     * D -> ENVBEG Dc ENVEND
+     * Ds-> T Ds
+     *    | CC Ds
+     *    | 
+     * T -> (Anything???? Will describe later)
+     * CC-> BC Cc EC
+     * Cc-> T
+     */
+    /* Check if Grammar is LR(1)*/
+    /* TODO: Might be worth looking into a weak grammar that is enough to
+     * recognize any LaTeX document (Prod 12)
+     * TODO/NOTE: BC and EC are 100% not terminal (and neither are ENVBEG
+     * and ENVEND
+     * TODO: Recognizing correctly BC is ESSENTIAL to a correct translation
+     * from LRC to C and to TEX, (id, position and environment)
+     *      NOTE: These can ALL be intertwined, their position in the
+     *      document does NOT matter for the C file.
+     * NOTE: \begin{code} -> \begin{verbatim}
+     * */
+    fd_cfile = creat("./tmp.c", 0600); /* tmp file will be deleted shortly */
+    fd_tfile = creat("./tmp.tex", 0600);
+
+
+
+    close(fd_cfile);
+    close(fd_tfile);
     return 0;
 }
 
