@@ -1,10 +1,14 @@
 # literateC
 
-**literateC** is a UNIX LR(1) parser for C89 literate Programming.
+**literateC** is a UNIX LL(1) parser for C89 literate Programming.
 
 ### Note
   **literateC** is not a compiler or a typesetting program,
 it is just a translation parser to C and (La)TeX
+
+  It was originaly meant to be a LR(1) canonical parser, but such is too
+complex to build from scratch and is best done with assistance from tools
+such as Lex and Yacc.
 
 ## Features
 
@@ -33,3 +37,4 @@ WIP - To be Developed
 
    * Knuth, Donald; "On the Translation of Languages from
 Left to Right"; Information and Control Vol.8, Issue 6, p607-639; 1965
+   * Purple/Red/Green Dragon Book (any of which is helpful)

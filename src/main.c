@@ -8,24 +8,21 @@
 
 #define NIL (void *) 0
 
-int cfile(char* file_path);
-void path_to_name(char** file_name, char* file_path);
-void lexer();
-int parse(int fd, char* file_name);
+static int cfile(char* file_path);
+static void path_to_name(char** file_name, char* file_path);
+extern void lexer();
+extern int parse(int fd, char* file_name);
 
-
-int
+static int
 main(int argc,
      char**argv)
 {
-    int fd_c;
-    char* file_path;
-    char* file_name;
-    char* tmpc = "./tmp.c";
-    char* tmpt = "./tmp.tex";
-    char* arg1[] = { tmpc , NIL };
-    char* arg2[] = { tmpt , NIL };
-    int res;
+    auto int fd_c, res;
+    auto char* file_path, file_name,
+    tmpc = "./tmp.c",
+    tmpt = "./tmp.tex",
+    arg1[] = { tmpc , NIL },
+    arg2[] = { tmpt , NIL };
     /* 0 -> success
        argument error:
         1 -> Number of Args
@@ -60,8 +57,10 @@ main(int argc,
         /*execv("gcc", arg1);
         execv("latex", arg2);
         */
+        /* if (flag)
         unlink(tmpc);
         unlink(tmpt);
+        */
     }
 
 
@@ -97,7 +96,7 @@ main(int argc,
 int
 cfile(char* file_path)
 {
-    int res = 0;
+    auto int res = 0;
     while (*file_path && *file_path != '.')
         file_path++;
     if (*file_path == '.')
@@ -108,7 +107,7 @@ cfile(char* file_path)
 void
 path_to_name(char** file_name, char* file_path)
 {
-    int i, dir_nest = 0;
+    auto int i, dir_nest = 0;
     for (i=0; file_path[i]; i++)
         if (file_path[i] == '/')
             dir_nest++;
@@ -119,47 +118,5 @@ path_to_name(char** file_name, char* file_path)
         file_path++;
     }
     *file_name = file_path;
-}
-
-int
-parse(int fd, char* file_name)
-{
-    int fd_cfile;
-    int fd_tfile;
-    /* GRAMMAR:
-     * S -> P D
-     * P -> C Is
-     * C -> docclass[id*]{id}
-     *    | docclass{id}
-     * Is-> I Is
-     *    | 
-     * I -> usepack{id}   
-     * D -> ENVBEG Dc ENVEND
-     * Ds-> T Ds
-     *    | CC Ds
-     *    | 
-     * T -> (Anything???? Will describe later)
-     * CC-> BC Cc EC
-     * Cc-> T
-     */
-    /* Check if Grammar is LR(1)*/
-    /* TODO: Might be worth looking into a weak grammar that is enough to
-     * recognize any LaTeX document (Prod 12)
-     * TODO/NOTE: BC and EC are 100% not terminal (and neither are ENVBEG
-     * and ENVEND
-     * TODO: Recognizing correctly BC is ESSENTIAL to a correct translation
-     * from LRC to C and to TEX, (id, position and environment)
-     *      NOTE: These can ALL be intertwined, their position in the
-     *      document does NOT matter for the C file.
-     * NOTE: \begin{code} -> \begin{verbatim}
-     * */
-    fd_cfile = creat("./tmp.c", 0600); /* tmp file will be deleted shortly */
-    fd_tfile = creat("./tmp.tex", 0600);
-
-
-
-    close(fd_cfile);
-    close(fd_tfile);
-    return 0;
 }
 
